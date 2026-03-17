@@ -38,7 +38,7 @@ ps=koneksi.prepareStatement("select reg_periksa.no_reg,reg_periksa.no_rawat,reg_
                                "penjab.png_jawab like ?) ")+terbitsep+" order by reg_periksa.no_rawat "); 
 ```
 Ketika sudah diganti di bagian tsb, Tambahkan di tabel Tampil Untuk menampilkan Menu Paket Pemeriksaan MCU  
-Tam,bahkan didlm while(rs.next()) 
+Tambahkan didlm while(rs.next()) 
 ```
 Sequel.cariIsi("SELECT jns_perawatan_lab.nm_perawatan " +  // ← nm_perawatan di kolom 1
                                     "FROM reg_periksa " +
@@ -48,3 +48,25 @@ Sequel.cariIsi("SELECT jns_perawatan_lab.nm_perawatan " +  // ← nm_perawatan d
                                     rs.getString(2))  // ← no_rawat di index 
 ```
 Jangan Lupa tambahkan jumlah kolom dan beri nama Paket Pemeriksaan MCU
+
+
+# 4. Tambah Instansi di Tabel RawatIap
+Buka di Folder simrskhanza lalu di file dlgKamarInap.java 
+Tambahkan Jumlah kolom terlebih dahulu, kemudian tambahkan nama Instansi/Perusahaan.
+Ketika sudah, tambahkan di bagian tampil ()
+Tambahkan didlm while(rs.next()) 
+```
+Sequel.cariIsi("select perusahaan_pasien.nama_perusahaan, pasien.perusahaan_pasien, reg_periksa.no_rkm_medis from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis inner join perusahaan_pasien on pasien.perusahaan_pasien=perusahaan_pasien.kode_perusahaan where reg_periksa.no_rkm_medis=?",rs.getString(2)),
+```
+
+# 5. Tambah Instansi di Tabel Rawa Jalan
+Buka di Folder simrskhanza lalu di file dlgKasirRalan.java 
+Tambahkan Jumlah kolom terlebih dahulu, kemudian tambahkan nama Instansi/Perusahaan.
+Ketika sudah, tambahkan di bagian tampil ()
+Tambahkan didlm while(rs.next()) 
+```
+Sequel.cariIsi("select perusahaan_pasien.nama_perusahaan, pasien.perusahaan_pasien, reg_periksa.no_rkm_medis from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis inner join perusahaan_pasien on pasien.perusahaan_pasien=perusahaan_pasien.kode_perusahaan where reg_periksa.no_rkm_medis=?",rskasir.getString(7)),
+```
+
+
+
