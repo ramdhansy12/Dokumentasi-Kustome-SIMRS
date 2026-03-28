@@ -67,6 +67,95 @@ Tambahkan didlm while(rs.next())
 ```
 Sequel.cariIsi("select perusahaan_pasien.nama_perusahaan, pasien.perusahaan_pasien, reg_periksa.no_rkm_medis from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis inner join perusahaan_pasien on pasien.perusahaan_pasien=perusahaan_pasien.kode_perusahaan where reg_periksa.no_rkm_medis=?",rskasir.getString(7)),
 ```
+# 6. Agar No Resgistrasi Double dari MJKN dan Onsite (Rencana Kontrol)
+Buka di Folder di Permintaan, Editing di line isNomer(), Ganti Seperti dibawah ini :
+```
+ private void isNomer(){
+//        switch (URUTNOREG) {
+//            case "poli":
+//                Valid.autoNomer3("select ifnull(MAX(CONVERT(no_reg,signed)),0) from booking_registrasi where kd_poli='"+KdPoli.getText()+"' and tanggal_periksa='"+Valid.SetTgl(TanggalPeriksa.getSelectedItem()+"")+"'","",3,NoReg);
+//                break;
+//            case "dokter":
+//                Valid.autoNomer3("select ifnull(MAX(CONVERT(no_reg,signed)),0) from booking_registrasi where kd_dokter='"+KdDokter.getText()+"' and tanggal_periksa='"+Valid.SetTgl(TanggalPeriksa.getSelectedItem()+"")+"'","",3,NoReg);
+//                break;
+//            case "dokter + poli":             
+//                Valid.autoNomer3("select ifnull(MAX(CONVERT(no_reg,signed)),0) from booking_registrasi where kd_dokter='"+KdDokter.getText()+"' and kd_poli='"+KdPoli.getText()+"' and tanggal_periksa='"+Valid.SetTgl(TanggalPeriksa.getSelectedItem()+"")+"'","",3,NoReg);
+//                break;
+//            default:
+//                Valid.autoNomer3("select ifnull(MAX(CONVERT(no_reg,signed)),0) from booking_registrasi where kd_dokter='"+KdDokter.getText()+"' and tanggal_periksa='"+Valid.SetTgl(TanggalPeriksa.getSelectedItem()+"")+"'","",3,NoReg);
+//                break;
+//        }
+        switch (URUTNOREG) {    
+        case "poli":
+        Valid.autoNomer3(
+            "select LPAD(ifnull(MAX(CONVERT(no_reg, signed)) + 1, 1), 3, '0') as no_reg " +
+            "from (" +
+            "  select no_reg from reg_periksa where kd_poli='" + KdPoli.getText() + 
+            "' and tgl_registrasi='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem() + "") + 
+            "' UNION ALL " +
+            "  select no_reg from booking_registrasi where kd_poli='" + KdPoli.getText() + 
+            "' and tanggal_periksa='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem() + "") + 
+            "'" +
+            ") as combined",
+            "", 
+            3, 
+            NoReg
+        );
+        break;
+    case "dokter":
+        Valid.autoNomer3(
+            "select LPAD(ifnull(MAX(CONVERT(no_reg, signed)) + 1, 1), 3, '0') as no_reg " +
+            "from (" +
+            "  select no_reg from reg_periksa where kd_dokter='" + KdDokter.getText() + 
+            "' and tgl_registrasi='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem() + "") + 
+            "' UNION ALL " +
+            "  select no_reg from booking_registrasi where kd_dokter='" + KdDokter.getText() + 
+            "' and tanggal_periksa='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem() + "") + 
+            "'" +
+            ") as combined",
+            "", 
+            3, 
+            NoReg
+        );
+        break;
+    case "dokter + poli":
+        Valid.autoNomer3(
+            "select LPAD(ifnull(MAX(CONVERT(no_reg, signed)) + 1, 1), 3, '0') as no_reg " +
+            "from (" +
+            "  select no_reg from reg_periksa where kd_dokter='" + KdDokter.getText() + 
+            "' and kd_poli='" + KdPoli.getText() + 
+            "' and tgl_registrasi='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem() + "") + 
+            "' UNION ALL " +
+            "  select no_reg from booking_registrasi where kd_dokter='" + KdDokter.getText() + 
+            "' and kd_poli='" + KdPoli.getText() + 
+            "' and tanggal_periksa='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem() + "") + 
+            "'" +
+            ") as combined",
+            "", 
+            3, 
+            NoReg
+        );
+        break;
+    default:
+        Valid.autoNomer3(
+            "select LPAD(ifnull(MAX(CONVERT(no_reg, signed)) + 1, 1), 3, '0') as no_reg " +
+            "from (" +
+            "  select no_reg from reg_periksa where kd_dokter='" + KdDokter.getText() + 
+            "' and tgl_registrasi='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem() + "") + 
+            "' UNION ALL " +
+            "  select no_reg from booking_registrasi where kd_dokter='" + KdDokter.getText() + 
+            "' and tanggal_periksa='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem() + "") + 
+            "'" +
+            ") as combined",
+            "", 
+            3, 
+            NoReg
+        );
+        break;
+    }    
+    }
+
+```
 
 
-
+#
